@@ -44,9 +44,6 @@
 
 name: 'Terraform'
 
-env:
-  AWS_PROFILE: web-resume-back
-
 on:
   push:
     branches: [ "main" ]
