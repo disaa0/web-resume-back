@@ -5,6 +5,12 @@ terraform {
       version = "~> 5.54.1"
     }
   }
+  backend "s3" {
+    profile = "poweruser"
+    bucket = "disaadev-terraform"
+    key    = "terraform.tfstate"
+    region = "us-east-2"
+  }
 }
 
 

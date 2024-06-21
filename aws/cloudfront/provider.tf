@@ -1,6 +1,6 @@
 provider "aws" {
   region = "us-east-1"
-  profile = "admin-disaa0"
+  profile = "poweruser"
 }
 
 terraform {
