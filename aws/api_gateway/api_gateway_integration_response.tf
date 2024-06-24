@@ -5,7 +5,7 @@ resource "aws_api_gateway_integration_response" "met-4su6xysix1-002F-21dp4a-002F
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
     "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'https://disaa.dev'"
   }
 
   rest_api_id = "4su6xysix1"
@@ -17,7 +17,7 @@ resource "aws_api_gateway_integration_response" "met-4su6xysix1-002F-21dp4a-002F
   resource_id = "21dp4a"
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+    "method.response.header.Access-Control-Allow-Origin" = "'https://disaa.dev'"
   }
 
   rest_api_id = "4su6xysix1"
@@ -29,7 +29,7 @@ resource "aws_api_gateway_integration_response" "met-4su6xysix1-002F-aocwif-002F
   resource_id = "aocwif"
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+    "method.response.header.Access-Control-Allow-Origin" = "'https://disaa.dev'"
   }
 
   rest_api_id = "4su6xysix1"
@@ -43,7 +43,7 @@ resource "aws_api_gateway_integration_response" "met-4su6xysix1-002F-aocwif-002F
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'https://disaa.dev'"
   }
 
   rest_api_id = "4su6xysix1"

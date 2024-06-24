@@ -7,7 +7,7 @@ resource "aws_api_gateway_usage_plan" "default-plan" {
   name = "default plan"
 
   quota_settings {
-    limit  = "10"
+    limit  = "50"
     offset = "0"
     period = "DAY"
   }
