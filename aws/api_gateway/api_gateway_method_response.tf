@@ -1,6 +1,6 @@
 resource "aws_api_gateway_method_response" "met-4su6xysix1-002F-21dp4a-002F-OPTIONS-002F-200" {
   http_method = "OPTIONS"
-  resource_id = "21dp4a"
+  resource_id = aws_api_gateway_resource.res-21dp4a.id
 
   response_models = {
     "application/json" = "Empty"
@@ -12,13 +12,13 @@ resource "aws_api_gateway_method_response" "met-4su6xysix1-002F-21dp4a-002F-OPTI
     "method.response.header.Access-Control-Allow-Origin"  = "false"
   }
 
-  rest_api_id = "4su6xysix1"
+  rest_api_id = aws_api_gateway_rest_api.api-4su6xysix1_resumeapi.id
   status_code = "200"
 }
 
 resource "aws_api_gateway_method_response" "met-4su6xysix1-002F-21dp4a-002F-POST-002F-200" {
   http_method = "POST"
-  resource_id = "21dp4a"
+  resource_id = aws_api_gateway_resource.res-21dp4a.id
 
   response_models = {
     "application/json" = "Empty"
@@ -28,13 +28,13 @@ resource "aws_api_gateway_method_response" "met-4su6xysix1-002F-21dp4a-002F-POST
     "method.response.header.Access-Control-Allow-Origin" = "false"
   }
 
-  rest_api_id = "4su6xysix1"
+  rest_api_id = aws_api_gateway_rest_api.api-4su6xysix1_resumeapi.id
   status_code = "200"
 }
 
 resource "aws_api_gateway_method_response" "met-4su6xysix1-002F-aocwif-002F-GET-002F-200" {
   http_method = "GET"
-  resource_id = "aocwif"
+  resource_id = aws_api_gateway_resource.res-aocwif.id
 
   response_models = {
     "application/json" = "Empty"
@@ -44,13 +44,13 @@ resource "aws_api_gateway_method_response" "met-4su6xysix1-002F-aocwif-002F-GET-
     "method.response.header.Access-Control-Allow-Origin" = "false"
   }
 
-  rest_api_id = "4su6xysix1"
+  rest_api_id = aws_api_gateway_rest_api.api-4su6xysix1_resumeapi.id
   status_code = "200"
 }
 
 resource "aws_api_gateway_method_response" "met-4su6xysix1-002F-aocwif-002F-OPTIONS-002F-200" {
   http_method = "OPTIONS"
-  resource_id = "aocwif"
+  resource_id = aws_api_gateway_resource.res-aocwif.id
 
   response_models = {
     "application/json" = "Empty"
@@ -62,6 +62,6 @@ resource "aws_api_gateway_method_response" "met-4su6xysix1-002F-aocwif-002F-OPTI
     "method.response.header.Access-Control-Allow-Origin"  = "false"
   }
 
-  rest_api_id = "4su6xysix1"
+  rest_api_id = aws_api_gateway_rest_api.api-4su6xysix1_resumeapi.id
   status_code = "200"
 }

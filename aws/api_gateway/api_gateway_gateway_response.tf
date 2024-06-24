@@ -10,5 +10,5 @@ resource "aws_api_gateway_gateway_response" "res-4su6xysix1-002F-DEFAULT_4XX" {
   }
 
   response_type = "DEFAULT_4XX"
-  rest_api_id   = "4su6xysix1"
+  rest_api_id   = aws_api_gateway_rest_api.api-4su6xysix1_resumeapi.id
 }

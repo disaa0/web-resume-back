@@ -1,6 +1,6 @@
 resource "aws_api_gateway_usage_plan" "default-plan" {
   api_stages {
-    api_id = "4su6xysix1"
+    api_id = aws_api_gateway_rest_api.api-4su6xysix1_resumeapi.id
     stage  = "test"
   }
 

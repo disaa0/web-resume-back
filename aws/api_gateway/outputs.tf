@@ -86,7 +86,7 @@ output "aws_api_gateway_resource_res-ld78n10odb_id" {
   value = "${aws_api_gateway_resource.res-ld78n10odb.id}"
 }
 
-output "aws_api_gateway_rest_api_api-4su6xysix1_resumeapi_id" {
+output "aws_api_gateway_rest_api_api-4su6xysix1_resumeapii_id" {
   value = "${aws_api_gateway_rest_api.api-4su6xysix1_resumeapi.id}"
 }
 
