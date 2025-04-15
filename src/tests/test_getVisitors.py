@@ -6,7 +6,7 @@ import os
 from botocore.exceptions import ClientError
 import json
 from decimal import Decimal
-from lambda_functions.getVisitors.lambda_function import lambda_handler, decimal_default
+from lambda_functions.getVisitors.lambda_function import lambda_handler
 
 os.environ['AWS_ACCESS_KEY_ID'] = 'testing'
 os.environ['AWS_SECRET_ACCESS_KEY'] = 'testing'
@@ -50,34 +50,67 @@ class TestLambdaHandler(unittest.TestCase):
         self.assertEqual(response['statusCode'], 200)
         body = json.loads(response['body'])
         self.assertEqual(body['visitors'], 123)
+        self.assertIn('headers', response)
 
-    def test_item_not_found(self):
+    def test_item_not_found_creates_default(self):
         # Remove the item to simulate not found scenario
         self.table.delete_item(Key={'id': 'visitors'})
         
         event = {}
         context = {}
         response = lambda_handler(event, context)
-        self.assertEqual(response['statusCode'], 404)
+        
+        # Should return 200 with default value of 0
+        self.assertEqual(response['statusCode'], 200)
         body = json.loads(response['body'])
-        self.assertEqual(body, 'Item not found')
+        self.assertEqual(body['visitors'], 0)
 
-    @patch('lambda_functions.getVisitors.lambda_function.boto3.resource')
-    def test_client_error(self, mock_boto_resource):
-        mock_dynamodb = MagicMock()
-        mock_table = mock_dynamodb.Table.return_value
+    def test_invalid_visitor_count(self):
+        # Add an item with invalid visitor count
+        self.table.put_item(Item={'id': 'visitors', 'visitor_count': Decimal('-10')})
+        
+        event = {}
+        context = {}
+        response = lambda_handler(event, context)
+        
+        # Should return 200 but reset count to 0
+        self.assertEqual(response['statusCode'], 200)
+        body = json.loads(response['body'])
+        self.assertEqual(body['visitors'], 0)
+
+    @patch('lambda_functions.getVisitors.lambda_function.get_dynamodb_table')
+    def test_client_error_rate_limit(self, mock_get_table):
+        # Setup mock to raise rate limit error
+        mock_table = MagicMock()
         mock_table.get_item.side_effect = ClientError(
-            {'Error': {'Message': 'An error occurred'}},
+            {'Error': {'Code': 'ProvisionedThroughputExceededException', 'Message': 'Rate limit exceeded'}},
             'GetItem'
         )
-        mock_boto_resource.return_value = mock_dynamodb
+        mock_get_table.return_value = mock_table
 
         event = {}
         context = {}
         response = lambda_handler(event, context)
+        
+        # Should return 429 for rate limit
+        self.assertEqual(response['statusCode'], 429)
+        body = json.loads(response['body'])
+        self.assertIn('error', body)
+        self.assertIn('Rate limit exceeded', body['error'])
+
+    @patch('lambda_functions.getVisitors.lambda_function.get_dynamodb_table')
+    def test_unexpected_exception(self, mock_get_table):
+        # Setup mock to raise unexpected exception
+        mock_get_table.side_effect = Exception("Unexpected error")
+
+        event = {}
+        context = {}
+        response = lambda_handler(event, context)
+        
+        # Should return 500 for unexpected errors
         self.assertEqual(response['statusCode'], 500)
         body = json.loads(response['body'])
-        self.assertEqual(body, 'Unable to get item: An error occurred')
+        self.assertIn('error', body)
 
 if __name__ == '__main__':
     unittest.main()

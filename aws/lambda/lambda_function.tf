@@ -1,7 +1,9 @@
 data "archive_file" "getVisitors" {
   type        = "zip"
-  source_file = "./src/lambda_functions/getVisitors/lambda_function.py"
+  source_dir  = "./src/lambda_functions"
   output_path = "./src/lambda_functions/getVisitors/lambda_function.zip"
+  
+  excludes    = ["updateVisitors/lambda_function.zip"]
 }
 
 resource "aws_lambda_function" "getVisitors" {
@@ -12,7 +14,7 @@ resource "aws_lambda_function" "getVisitors" {
   }
 
   function_name = "getVisitors"
-  handler       = "lambda_function.lambda_handler"
+  handler       = "getVisitors.lambda_function.lambda_handler"
   
 
   logging_config {
@@ -38,8 +40,10 @@ resource "aws_lambda_function" "getVisitors" {
 
 data "archive_file" "updateVisitors" {
   type        = "zip"
-  source_file = "./src/lambda_functions/updateVisitors/lambda_function.py"
+  source_dir  = "./src/lambda_functions"
   output_path = "./src/lambda_functions/updateVisitors/lambda_function.zip"
+  
+  excludes    = ["getVisitors/lambda_function.zip"]
 }
 
 resource "aws_lambda_function" "updateVisitors" {
@@ -50,7 +54,7 @@ resource "aws_lambda_function" "updateVisitors" {
   }
 
   function_name = "updateVisitors"
-  handler       = "lambda_function.lambda_handler"
+  handler       = "updateVisitors.lambda_function.lambda_handler"
 
   logging_config {
     log_format = "Text"

@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: "Terraform"
 
 on:
   workflow_run:
@@ -15,44 +15,45 @@ permissions:
 jobs:
   terraform:
     if: ${{ github.event.workflow_run.conclusion == 'success'}}
-    name: 'Terraform'
+    name: "Terraform"
     runs-on: ubuntu-latest
     environment: production
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: bash
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Configure AWS Credentials
-      # You may pin to the exact commit or the version.
-      # uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        # AWS Region, e.g. us-east-2
-        aws-region: us-east-2 
-        # The Amazon Resource Name (ARN) of the role to assume. Use the provided credentials to assume an IAM role and configure the Actions environment with the assumed role credentials rather than with the provided credentials.
-        role-to-assume: arn:aws:iam::767398113748:role/web-resume-back
+      - name: Configure AWS Credentials
+        # Use the AWS GitHub Action to configure credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::767398113748:role/web-resume-back
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init
+      # Setup Terraform using the official Terraform GitHub Action
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
 
-    # Checks that all Terraform configuration files adhere to a canonical format
-    - name: Terraform Format
-      run: terraform fmt -check
+      # Initialize a new or existing Terraform working directory
+      - name: Terraform Init
+        run: terraform init
 
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false
+      # Check that all Terraform configuration files adhere to a canonical format
+      - name: Terraform Format
+        run: terraform fmt -check
 
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-    - name: Terraform Apply
-      if: ${{ github.event.workflow_run.event == 'push' }}
-      run: terraform apply -auto-approve -input=false
+      # Generate an execution plan for Terraform
+      - name: Terraform Plan
+        run: terraform plan -input=false
+
+      # Apply Terraform configuration if the workflow run event is a push
+      - name: Terraform Apply
+        if: ${{ github.event.workflow_run.event == 'push' }}
+        run: terraform apply -auto-approve -input=false
